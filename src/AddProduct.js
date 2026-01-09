@@ -156,7 +156,7 @@ export const AddProduct = () => {
 
   const handleGetProductsData = async (query = "") => {
     try {
-      const data = await fetchProducts(query);
+      const data = await fetchProducts(query, page);
       setProductResponse(data);
     } catch {}
   };
@@ -513,4 +513,5 @@ export const AddProduct = () => {
     </div>
   );
 };
+
 
