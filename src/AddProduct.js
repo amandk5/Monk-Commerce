@@ -12,6 +12,7 @@ import { ProductListModal } from "./component/ProductListModal";
 export const AddProduct = () => {
   const [openModal, setOpenModal] = useState(false);
   const [activeProductIndex, setActiveProductIndex] = useState(null);
+  const [page, setPage] = useState(1);
 
   const [productResponse, setProductResponse] = useState([]);
 
@@ -160,6 +161,28 @@ export const AddProduct = () => {
     } catch {}
   };
 
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
+  const loadMoreProducts = async (searchValue) => {
+    try {
+      // if (loading || !hasMore) return;
+      if (loading) return;
+      setLoading(true);
+
+      const newData = await fetchProducts(searchValue, page + 1);
+
+      if (!newData.length) {
+        setHasMore(false);
+      } else {
+        setProductResponse((prev) => [...prev, ...newData]);
+        setPage((p) => p + 1);
+      }
+
+      setLoading(false);
+    } catch {}
+  };
+  
   useEffect(() => {
     handleGetProductsData();
   }, []);
@@ -477,16 +500,17 @@ export const AddProduct = () => {
 
       {/* modal  */}
       <ProductListModal
-        {...{
-          openModal,
-          closeModal,
-          debouncedSearch,
-          productResponse,
-          handleProductSelect,
-          handleVariantSelect,
-          handleModalAdd,
-        }}
+        openModal={openModal}
+        closeModal={closeModal}
+        debouncedSearch={debouncedSearch}
+        productResponse={productResponse}
+        handleProductSelect={handleProductSelect}
+        handleVariantSelect={handleVariantSelect}
+        handleModalAdd={handleModalAdd}
+        hasMore={hasMore}
+        onLoadMore={loadMoreProducts}
       />
     </div>
   );
 };
+
