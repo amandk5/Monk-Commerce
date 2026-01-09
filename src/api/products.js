@@ -5,9 +5,9 @@ export const fetchProducts = async (search = "", page = 1, limit = 10) => {
       limit,
     });
 
-    if (search?.trim()) {
-      params.append("search", search.trim());
-    }
+    // if (search?.trim()) {
+    //   params.append("search", search.trim());
+    // }
 
     const res = await fetch(
       `/.netlify/functions/fetchProducts?${params.toString()}`
@@ -33,3 +33,4 @@ export const fetchProducts = async (search = "", page = 1, limit = 10) => {
     return [];
   }
 };
+
