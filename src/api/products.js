@@ -1,14 +1,25 @@
-export const fetchProducts = async (search = "") => {
+export const fetchProducts = async (search = "", page = 1, limit = 10) => {
   try {
-    const qs = search ? `?search=${encodeURIComponent(search)}` : "";
+    const params = new URLSearchParams({
+      page,
+      limit,
+    });
+
+    if (search?.trim()) {
+      params.append("search", search.trim());
+    }
 
     const res = await fetch(
-      `/.netlify/functions/fetchProducts${qs}`
+      `/.netlify/functions/fetchProducts?${params.toString()}`
     );
+
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
 
     const data = await res.json();
 
-    return data.map((item) => ({
+    return (data || []).map((item) => ({
       ...item,
       isSelected: false,
       variants:
