@@ -9,7 +9,19 @@ export const ProductListModal = ({
   handleProductSelect,
   handleVariantSelect,
   handleModalAdd,
+  onLoadMore, 
+  hasMore, 
 }) => {
+  const handleScroll = useCallback(
+    (e) => {
+      const { scrollTop, scrollHeight, clientHeight } = e.target;
+      if (scrollHeight - scrollTop <= clientHeight + 30) {
+        onLoadMore(debouncedSearch);
+      }
+    },
+    [onLoadMore, hasMore]
+  );
+  
   return (
     <Modal open={openModal} onClose={closeModal}>
       <Box
@@ -17,7 +29,7 @@ export const ProductListModal = ({
           position: "absolute",
           top: "50%",
           left: "50%",
-          height: "400px",
+          height: "450px",
           overflow: "scroll",
           transform: "translate(-50%, -50%)",
           width: 500,
@@ -41,6 +53,13 @@ export const ProductListModal = ({
           onChange={(e) => debouncedSearch(e.target.value)}
         />
 
+        <div
+          onScroll={handleScroll}
+          style={{
+            overflow: "scroll",
+            height: "300px",
+          }}
+        >
         {productResponse?.map((product) => (
           <div key={product.id} style={{ marginBottom: "10px" }}>
             <div
@@ -83,6 +102,7 @@ export const ProductListModal = ({
             ))}
           </div>
         ))}
+        </div>
 
         <div
           style={{
@@ -117,3 +137,4 @@ export const ProductListModal = ({
     </Modal>
   );
 };
+
