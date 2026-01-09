@@ -31,7 +31,6 @@ export const ProductListModal = ({
           top: "50%",
           left: "50%",
           height: "450px",
-          overflow: "scroll",
           transform: "translate(-50%, -50%)",
           width: 500,
           background: "#fff",
@@ -138,5 +137,6 @@ export const ProductListModal = ({
     </Modal>
   );
 };
+
 
 
